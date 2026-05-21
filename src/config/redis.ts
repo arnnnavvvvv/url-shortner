@@ -3,10 +3,7 @@ import { createClient } from "redis";
 console.log("REDIS FILE LOADED");
 
 const redisClient = createClient({
-  url: process.env.REDIS_URL,
-  socket: {
-    tls: true
-  }
+  url: process.env.REDIS_URL
 });
 
 export const connectRedis = async () => {
