@@ -2,56 +2,34 @@ console.log("APP BOOTING");
 console.log("APP FILE STARTED");
 
 import express from "express";
+import dotenv from "dotenv";
+import authRoutes from "./routes/auth.routes";
+import urlRoutes from "./routes/url.routes";
+import { errorHandler }from "./middleware/error.middleware";
+import { redirectToUrl }from "./controllers/url.controller";
+import { logger }from "./middleware/logger.middleware";
+import { connectRedis }from "./config/redis";
+import {rateLimiterMiddleware} from "./middleware/rateLimit.middleware";
+import swaggerUi from "swagger-ui-express";
+import {swaggerSpec} from "./config/swagger";
 
-// import dotenv from "dotenv";
-
-// import authRoutes from "./routes/auth.routes";
-// import urlRoutes from "./routes/url.routes";
-
-// import { errorHandler }
-// from "./middleware/error.middleware";
-
-// import { redirectToUrl }
-// from "./controllers/url.controller";
-
-// import { logger }
-// from "./middleware/logger.middleware";
-
-// import { connectRedis }
-// from "./config/redis";
-
-// import {
-//   rateLimiterMiddleware
-// } from "./middleware/rateLimit.middleware";
-
-// import swaggerUi
-// from "swagger-ui-express";
-
-// import {
-//   swaggerSpec
-// } from "./config/swagger";
-
-// dotenv.config();
+dotenv.config();
 
 const app = express();
 
 app.use(express.json());
 
-// app.use(logger);
+app.use(logger);
 
-// app.use(rateLimiterMiddleware);
+app.use(rateLimiterMiddleware);
 
-// app.use(
-//   "/api-docs",
-//   swaggerUi.serve,
-//   swaggerUi.setup(swaggerSpec)
-// );
+app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerSpec));
 
-// app.use("/auth", authRoutes);
+app.use("/auth", authRoutes);
 
-// app.use("/urls", urlRoutes);
+app.use("/urls", urlRoutes);
 
-// app.get("/:shortCode", redirectToUrl);
+app.get("/:shortCode", redirectToUrl);
 
 app.get("/", (req, res) => {
   res.send("API Running");
@@ -63,7 +41,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 console.log("STEP 1");
 
