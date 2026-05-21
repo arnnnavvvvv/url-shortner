@@ -1,17 +1,22 @@
-console.log("APP BOOTING");
-console.log("APP FILE STARTED");
-
 import express from "express";
 import dotenv from "dotenv";
+
 import authRoutes from "./routes/auth.routes";
 import urlRoutes from "./routes/url.routes";
-import { errorHandler }from "./middleware/error.middleware";
-import { redirectToUrl }from "./controllers/url.controller";
-import { logger }from "./middleware/logger.middleware";
-import { connectRedis }from "./config/redis";
-import {rateLimiterMiddleware} from "./middleware/rateLimit.middleware";
+
+import { errorHandler } from "./middleware/error.middleware";
+import { logger } from "./middleware/logger.middleware";
+
+// import {
+//   rateLimiterMiddleware
+// } from "./middleware/rateLimit.middleware";
+
+import { redirectToUrl } from "./controllers/url.controller";
+
 import swaggerUi from "swagger-ui-express";
-import {swaggerSpec} from "./config/swagger";
+import { swaggerSpec } from "./config/swagger";
+
+import { connectRedis } from "./config/redis";
 
 dotenv.config();
 
@@ -21,9 +26,13 @@ app.use(express.json());
 
 app.use(logger);
 
-app.use(rateLimiterMiddleware);
+// app.use(rateLimiterMiddleware);
 
-app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerSpec));
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
 
 app.use("/auth", authRoutes);
 
@@ -43,20 +52,16 @@ app.get("/health", (req, res) => {
 
 app.use(errorHandler);
 
-console.log("STEP 1");
-
 const PORT =
   Number(process.env.PORT) || 5000;
 
-console.log("STEP 2");
-
 const startServer = async () => {
-
-  console.log("STEP 3");
 
   try {
 
-    console.log("STEP 4");
+    await connectRedis();
+
+    console.log("Redis connected");
 
     app.listen(
       PORT,
@@ -70,38 +75,17 @@ const startServer = async () => {
       }
     );
 
-    console.log("STEP 5");
-
-    // try {
-
-    //   console.log("STEP 6");
-
-    //   await connectRedis();
-
-    //   console.log("STEP 7");
-
-    // } catch (redisError) {
-
-    //   console.error(
-    //     "Redis connection failed:",
-    //     redisError
-    //   );
-
-    // }
-
   } catch (error) {
 
     console.error(
-      "APP START ERROR:",
+      "Server startup failed:",
       error
     );
+
+    process.exit(1);
 
   }
 
 };
 
-console.log("STEP 8");
-
 startServer();
-
-console.log("STEP 9");
