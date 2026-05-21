@@ -42,12 +42,20 @@ app.get("/health", (req, res) => {
 
 app.use(errorHandler);
 
+console.log("STEP 1");
+
 const PORT =
   Number(process.env.PORT) || 5000;
 
+console.log("STEP 2");
+
 const startServer = async () => {
 
+  console.log("STEP 3");
+
   try {
+
+    console.log("STEP 4");
 
     app.listen(
       PORT,
@@ -61,9 +69,15 @@ const startServer = async () => {
       }
     );
 
+    console.log("STEP 5");
+
     try {
 
+      console.log("STEP 6");
+
       await connectRedis();
+
+      console.log("STEP 7");
 
     } catch (redisError) {
 
@@ -76,10 +90,17 @@ const startServer = async () => {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "APP START ERROR:",
+      error
+    );
 
   }
 
 };
 
+console.log("STEP 8");
+
 startServer();
+
+console.log("STEP 9");
