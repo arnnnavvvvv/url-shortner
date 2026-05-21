@@ -38,16 +38,47 @@ app.get("/health", (req, res) => {
   });
 });
 
-const PORT = Number(process.env.PORT) || 5000;
+
 
 app.use(errorHandler);
 
+const PORT =
+  Number(process.env.PORT) || 5000;
+
 const startServer = async () => {
 
-  await connectRedis();
+  try {
 
-  app.listen(PORT,"0.0.0.0",() => {console.log(`Server running on port ${PORT}`);}
-);
+    app.listen(
+      PORT,
+      "0.0.0.0",
+      () => {
+
+        console.log(
+          `Server running on port ${PORT}`
+        );
+
+      }
+    );
+
+    try {
+
+      await connectRedis();
+
+    } catch (redisError) {
+
+      console.error(
+        "Redis connection failed:",
+        redisError
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
 
 };
 
