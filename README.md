@@ -120,7 +120,7 @@ curl -X POST \
 ## Clone Repository
 
 ```bash
-git clone <your-repo-url>
+git clone <(https://github.com/arnnnavvvvv/url-shortner)>
 cd url-shortner
 ```
 
