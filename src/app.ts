@@ -1,3 +1,4 @@
+console.log("APP BOOTING");
 console.log("APP FILE STARTED");
 
 import express from "express";
