@@ -1,6 +1,6 @@
 # URL Shortener API
 
-A production-style URL shortening service built with Node.js, Express, PostgreSQL, Redis, Prisma, and Docker.
+A URL shortening service built with Node.js, Express, PostgreSQL, Redis, Prisma, and Docker.
 
 The project focuses on backend engineering fundamentals including authentication, caching, rate limiting, API documentation, containerization, and cloud deployment.
 
